@@ -2,9 +2,9 @@ package main
 
 import (
 	"bufio"
+	"encoding/csv"
 	"fmt"
 	"os"
-	"strings"
 )
 
 func main() {
@@ -36,7 +36,14 @@ func process() (err error) {
 		return
 	}
 
-	fmt.Println(strings.Join(al.ItemNames, ","))
+	w := csv.NewWriter(os.Stdout)
+
+	e = w.Write(al.ItemNames)
+	if e != nil {
+		err = e
+		return
+	}
+
 	f, e := os.Open(os.Args[2])
 	if e != nil {
 		err = e
@@ -53,13 +60,26 @@ func process() (err error) {
 			err = e
 			return
 		}
-		//fmt.Printf("=>[%s]\n", strings.Join(items[1:], "]["))
-		fmt.Println(strings.Join(items, ","))
+
+		e = w.Write(items)
+		if e != nil {
+			err = e
+			return
+		}
 	}
+
+	w.Flush()
 
 	e = sc.Err()
 	if e != nil {
 		err = e
+		return
+	}
+
+	e = w.Error()
+	if e != nil {
+		err = e
+		//return
 	}
 
 	return

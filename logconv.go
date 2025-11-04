@@ -9,15 +9,6 @@ import (
 	"time"
 )
 
-//const (
-// 127.0.0.1 - Jina [22/Feb/2017:10:34:12 -0700] "GET /sale-image.png HTTP/2" 200 1479
-// COMMON         = `(?P<remote>.+)\s+\S+\s+(?P<user>\S+)\s+\[(?P<timestamp>.+)\]\s+"(?P<method>\S+)\s+(?P<path>\S+)\s+(?P<version>\S+)"\s+(?P<status>\d+)\s+(?P<bodysize>\d+)`
-// COMMON_ITEMS   = `remote,user,timestamp,method,path,version,status,bodysize`
-// DATE_FMT       = `2/Jan/2006:3:4:5 -0700`
-// DATE_ITEM_NAME = `timestamp`
-// OUT_DATE_FMT   = "2006/01/02 15:04:05"
-//)
-
 type AL struct {
 	Title       string            `json:"title"`
 	Description string            `json:"description"`
@@ -27,20 +18,6 @@ type AL struct {
 	OutDateFmt  string            `json:"out_date_fmt"`
 	re          *regexp.Regexp
 }
-
-/*
-func NewAL(LogFmt string, itemNames []string) *AL {
-	return &AL{
-		LogFmt: LogFmt,
-		ItemNames: itemNames,
-		DateFmts:  map[string]string{DATE_ITEM_NAME: DATE_FMT},
-		//DateFmt:      DATE_FMT,
-		//DateItemName: DATE_ITEM_NAME,
-		OutDateFmt: OUT_DATE_FMT,
-		re:         regexp.MustCompile(LogFmt),
-	}
-}
-*/
 
 func LoadAL(filePath string) (r *AL, err error) {
 	bytes, e := os.ReadFile(filePath)
@@ -121,12 +98,3 @@ func (a *AL) Parse(line string) (items []string, err error) {
 
 	return
 }
-
-/*
-func CommonLog() *AL {
-	return NewAL(
-		COMMON,
-		strings.Split(COMMON_ITEMS, ","))
-	//[]string{"h", "u", "t", "r", "s", "b"})
-}
-*/
