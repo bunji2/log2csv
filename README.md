@@ -6,3 +6,31 @@ converter from log to csv file
 ```
 % log2csv config.json logfile.txt > out.csv
 ```
+
+## Config files
+
+### Common Log
+
+```json
+{
+    "title":"config for Apache Common Log Format",
+    "description":"Apache の Common Log 形式のログをCSVに変換する",
+    "log_fmt":"(?P<remote>.+)\\s+\\S+\\s+(?P<user>\\S+)\\s+\\[(?P<timestamp>.+)\\]\\s+\"(?P<method>\\S+)\\s+(?P<path>\\S+)\\s+(?P<version>\\S+)\"\\s+(?P<status>\\d+)\\s+(?P<bodysize>\\d+)",
+	"item_names":["remote","user","timestamp","method","path","version","status","bodysize"],
+	"date_fmts":{"timestamp":"2/Jan/2006:3:4:5 -0700"},
+	"out_date_fmt":"2006/01/02 15:04:05"
+}
+```
+
+### Combined Log
+
+```json
+{
+    "title":"config for Apache Combined Log Format",
+    "description":"Apache の Combined Log 形式のログを CSV に変換する",
+    "log_fmt":"(?P<remote>.+)\\s+\\S+\\s+(?P<user>\\S+)\\s+\\[(?P<timestamp>.+)\\]\\s+\"(?P<method>\\S+)\\s+(?P<path>\\S+)\\s+(?P<version>\\S+)\"\\s+(?P<status>\\d+)\\s+(?P<bodysize>\\d+)\\s+\"(?P<referer>.+)\"\\s+\"(?P<useragent>.+)\"",
+	"item_names":["remote","user","timestamp","method","path","version","status","bodysize","referer","useragent"],
+	"date_fmts":{"timestamp":"2/Jan/2006:3:4:5 -0700"},
+	"out_date_fmt":"2006/01/02 15:04:05"
+}
+```
