@@ -1,8 +1,6 @@
 package main
 
 import (
-	"bufio"
-	"encoding/csv"
 	"fmt"
 	"os"
 )
@@ -22,64 +20,25 @@ func run() int {
 }
 
 func process() (err error) {
-	if len(os.Args) < 2 {
+	if len(os.Args) < 3 {
 		err = fmt.Errorf(
-			"[USAGE] %s config.json logfile.txt > out.csv",
+			"[USAGE] %s config.json logfile1.txt ... logfileN.txt > out.csv",
 			os.Args[0])
 		return
 	}
 
-	//al := CommonLog()
-	al, e := LoadAL(os.Args[1])
+	conv, e := LoadConf(os.Args[1])
 	if e != nil {
 		err = e
 		return
 	}
 
-	w := csv.NewWriter(os.Stdout)
-
-	e = w.Write(al.ItemNames)
-	if e != nil {
-		err = e
-		return
-	}
-
-	f, e := os.Open(os.Args[2])
-	if e != nil {
-		err = e
-		return
-	}
-	defer f.Close()
-
-	sc := bufio.NewScanner(f)
-	for sc.Scan() {
-		line := sc.Text()
-		//fmt.Println(line)
-		items, e := al.Parse(line)
-		if e != nil {
-			err = e
-			return
+	// 引数で
+	for _, logFile := range os.Args[2:] {
+		err = conv.Process(logFile)
+		if err != nil {
+			break
 		}
-
-		e = w.Write(items)
-		if e != nil {
-			err = e
-			return
-		}
-	}
-
-	w.Flush()
-
-	e = sc.Err()
-	if e != nil {
-		err = e
-		return
-	}
-
-	e = w.Error()
-	if e != nil {
-		err = e
-		//return
 	}
 
 	return
