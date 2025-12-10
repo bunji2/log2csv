@@ -34,12 +34,7 @@ func process() (err error) {
 	}
 
 	// 引数で指定された複数のログファイルをCSVファイルに変換する
-	for _, logFile := range os.Args[2:] {
-		err = conv.Process(logFile)
-		if err != nil {
-			break
-		}
-	}
+	err = conv.Process(os.Args[2:])
 
 	return
 }

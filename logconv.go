@@ -102,7 +102,7 @@ func (lc *LogConv) Parse(line string) (items []string, err error) {
 	return
 }
 
-func (lc *LogConv) Process(filePath string) (err error) {
+func (lc *LogConv) Process(filePaths []string) (err error) {
 
 	w := csv.NewWriter(os.Stdout)
 
@@ -113,21 +113,29 @@ func (lc *LogConv) Process(filePath string) (err error) {
 		return
 	}
 
-	e = lc.processLogFile(filePath, func(items []string) error {
-		return w.Write(items)
-	})
+	// 各ファイルについて処理を繰り返す
+	for _, filePath := range filePaths {
+		e = lc.processLogFile(filePath, func(items []string) error {
+			return w.Write(items)
+		})
+		if e != nil {
+			break
+		}
+	}
+
+	w.Flush()
+
 	if e != nil {
 		err = e
 		return
 	}
-
-	w.Flush()
 
 	e = w.Error()
 	if e != nil {
 		err = e
 		//return
 	}
+
 	return
 }
 
